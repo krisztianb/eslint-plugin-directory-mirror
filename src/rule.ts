@@ -1,5 +1,4 @@
 import { Rule } from "eslint";
-import { Program } from "estree";
 import * as fs from "fs";
 import * as path from "path";
 import { DirectoryMirror, Options } from "./options";
@@ -27,12 +26,17 @@ export const rule: Rule.RuleModule = {
         const options = new Options(context.options[0] ?? {});
 
         return {
-            Program: (node) => checkMirrors(context, node, options),
+            Program: () => checkMirrors(context, options),
         };
     },
 };
 
-function checkMirrors(context: Rule.RuleContext, program: Program, options: Options): void {
+/**
+ * Checks if the current file matches any mirrors and if so whether the mirror is satisfied or not.
+ * @param context The context of the rule.
+ * @param options The rule options.
+ */
+function checkMirrors(context: Rule.RuleContext, options: Options): void {
     const filename = context.getFilename();
     const mirror = getMatchingMirror(filename, options.mirrors);
 
@@ -48,6 +52,12 @@ function checkMirrors(context: Rule.RuleContext, program: Program, options: Opti
     }
 }
 
+/**
+ * Gets the mirror that the given filename matches.
+ * @param filename The filename for which to find the mirror.
+ * @param mirrors All the mirrors passed to the rule.
+ * @returns The mirror that the filename matches or undefined if no mirror matches the filename.
+ */
 function getMatchingMirror(filename: string, mirrors: DirectoryMirror[]): DirectoryMirror | undefined {
     return mirrors.filter(
         (m) =>
@@ -58,6 +68,12 @@ function getMatchingMirror(filename: string, mirrors: DirectoryMirror[]): Direct
     )[0];
 }
 
+/**
+ * Gets the required file path for the given filename using the given mirror.
+ * @param filename The filename for which to get the required file path.
+ * @param mirror The mirror that is used to compute the required file path.
+ * @returns The file path for the given filename using the given mirror.
+ */
 function getRequiredFilePath(filename: string, mirror: DirectoryMirror): string {
     const subPath = path.dirname(filename).substring(mirror.forEach.dir.length);
     const filenameWithoutExt = path.basename(filename).slice(0, -mirror.forEach.ext.length);
