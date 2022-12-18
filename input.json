@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "anyOf": [
+    {
+      "maxItems": 0,
+      "minItems": 0,
+      "type": "array"
+    },
+    {
+      "items": {
+        "$ref": "#/definitions/InputOptions"
+      },
+      "maxItems": 1,
+      "minItems": 1,
+      "type": "array"
+    }
+  ],
+  "definitions": {
+    "DirectoryAndExtension": {
+      "additionalProperties": false,
+      "description": "Type for a directory and a file extension for it.",
+      "properties": {
+        "dir": {
+          "description": "The directory.",
+          "type": "string"
+        },
+        "ext": {
+          "description": "The file extension, ie: \".ts\".",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dir",
+        "ext"
+      ],
+      "type": "object"
+    },
+    "DirectoryMirror": {
+      "additionalProperties": false,
+      "description": "Type describing a directory mirroring.",
+      "properties": {
+        "forEach": {
+          "description": "Pattern for files that are checked.",
+          "type": "string"
+        },
+        "require": {
+          "$ref": "#/definitions/DirectoryAndExtension",
+          "description": "Object describing there the required mirrored file should be located."
+        }
+      },
+      "required": [
+        "forEach",
+        "require"
+      ],
+      "type": "object"
+    },
+    "InputOptions": {
+      "additionalProperties": false,
+      "description": "Type for the rule options.",
+      "properties": {
+        "mirrors": {
+          "items": {
+            "$ref": "#/definitions/DirectoryMirror"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "description": "The definition for the rule options array."
+}

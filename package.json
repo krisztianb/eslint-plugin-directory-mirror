@@ -1,0 +1,45 @@
+{
+    "name": "eslint-plugin-directory-mirror",
+    "version": "1.0.0",
+    "description": "An ESLint rule for mirroring directory structures.",
+    "author": {
+        "name": "Krisztián Balla",
+        "url": "https://github.com/krisztianb"
+    },
+    "license": "ISC",
+    "keywords": [
+        "eslint",
+        "eslintplugin"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/krisztianb/eslint-plugin-directory-mirror.git"
+    },
+    "main": "dist/index.js",
+    "files": [
+        "dist",
+        "input.json"
+    ],
+    "scripts": {
+        "format": "npx prettier --check ./src",
+        "clean": "rimraf dist",
+        "generate": "ts-json-schema-generator --no-top-ref -f tsconfig.json -t InputOptionsArray -o input.json",
+        "build": "npm run generate && tsc",
+        "test": "mocha --require ts-node/register test/**.test.ts",
+        "prepublishOnly": "npm run clean && npm run build && npm test"
+    },
+    "peerDependencies": {
+        "eslint": ">=0.8.0"
+    },
+    "devDependencies": {
+        "@types/eslint": "8.4.10",
+        "@types/node": "14.14.31",
+        "eslint": "8.29.0",
+        "mocha": "10.1.0",
+        "prettier": "2.8.0",
+        "rimraf": "3.0.2",
+        "ts-json-schema-generator": "1.1.2",
+        "ts-node": "10.9.1",
+        "typescript": "4.9.3"
+    }
+}
