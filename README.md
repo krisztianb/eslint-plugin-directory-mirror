@@ -36,8 +36,8 @@ It's the easiest to explain the option by looking an example:
       "error",
       {
         "mirrors": [
-          { forEach: "test/**/*.test.ts", require: { dir: "src", ext: ".ts" } },
-          { forEach: "src/**/*.ts", require: { dir: "test", ext: ".test.ts" } },
+          { forEach: { dir: "test", ext: ".test.ts", recursive: true }, require: { dir: "src", ext: ".ts" } },
+          { forEach: { dir: "src", ext: ".ts", recursive: true }, require: { dir: "test", ext: ".test.ts" } },
         ],
       },
     ],
@@ -47,7 +47,7 @@ It's the easiest to explain the option by looking an example:
 
 The option has a `mirrors` array with objects describing the mirrored directories.
 Read the object like this: `forEach` of these files require in the directory `dir` a file with the extension `ext`
-and the same name.
+and the same name (including sub directory).
 
 For the example above this means:
 

@@ -1,4 +1,5 @@
 import { RuleTester } from "eslint";
+import * as path from "path";
 import { InputOptions } from "../src/options";
 import { rule } from "../src/rule";
 
@@ -10,7 +11,7 @@ const tester = new RuleTester({
 });
 
 const testMirrorsSrc: InputOptions = {
-    mirrors: [{ forEach: "test/**/*.test.ts", require: { dir: "src", ext: ".ts" } }],
+    mirrors: [{ forEach: { dir: "test", ext: ".test.ts", recursive: true }, require: { dir: "src", ext: ".ts" } }],
 };
 
 tester.run("directory-mirror", rule, {
@@ -28,7 +29,11 @@ tester.run("directory-mirror", rule, {
             options: [testMirrorsSrc],
             filename: "test/missing-src.test.ts",
             code: "",
-            errors: [{ message: "required 'src/missing-src.test.ts' mirrored file does not exists" }],
+            errors: [
+                {
+                    message: "required 'src" + path.sep + "missing-src.ts' mirrored file does not exists",
+                },
+            ],
         },
     ],
 });

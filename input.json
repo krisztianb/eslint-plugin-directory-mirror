@@ -40,8 +40,27 @@
       "description": "Type describing a directory mirroring.",
       "properties": {
         "forEach": {
+          "additionalProperties": false,
           "description": "Pattern for files that are checked.",
-          "type": "string"
+          "properties": {
+            "dir": {
+              "description": "The directory.",
+              "type": "string"
+            },
+            "ext": {
+              "description": "The file extension, ie: \".ts\".",
+              "type": "string"
+            },
+            "recursive": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "dir",
+            "ext",
+            "recursive"
+          ],
+          "type": "object"
         },
         "require": {
           "$ref": "#/definitions/DirectoryAndExtension",

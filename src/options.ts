@@ -34,7 +34,7 @@ export type DirectoryAndExtension = {
  */
 export type DirectoryMirror = {
     /** Pattern for files that are checked. */
-    forEach: string;
+    forEach: DirectoryAndExtension & { recursive: boolean };
 
     /** Object describing there the required mirrored file should be located. */
     require: DirectoryAndExtension;
