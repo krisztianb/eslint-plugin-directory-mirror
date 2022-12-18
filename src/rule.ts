@@ -1,6 +1,7 @@
 import { Rule } from "eslint";
 import { Program } from "estree";
-import { Options } from "./options";
+import { DirectoryMirror, Options } from "./options";
+import * as minimatch from "minimatch";
 
 /**
  * Gets the schema defining the rule's input options.
@@ -32,22 +33,26 @@ export const rule: Rule.RuleModule = {
 
 function checkMirrors(context: Rule.RuleContext, program: Program, options: Options): void {
     const workDir = context.getCwd();
+    const filename = context.getFilename();
+    const mirror = getMatchingMirror(filename, options.mirrors);
 
     console.log(workDir);
     console.log(context.getFilename());
+    console.log(mirror);
 
-    /**
-   * const mirror = getMatchingMirror(program);
-   * if (mirror) {
-   *   const requiredFile = getRequiredFile(program, workDir, mirror);
+    if (mirror) {
+        /**   const requiredFile = getRequiredFile(program, workDir, mirror);
    *   if (!fs.exists(requiredFile)) {
    *     context.report({
            loc: { line: 1, column: 1 },
            message: "required '" + requiredFile + "' mirrored file does not exists",
          });
-   *   }
-   * }
-   */
+   *   }*/
+    }
+}
+
+function getMatchingMirror(filename: string, mirrors: DirectoryMirror[]): DirectoryMirror | undefined {
+    return mirrors.filter((m) => minimatch(filename, m.forEach))[0];
 }
 
 // /** Returns the import groups in the supplied program. */
