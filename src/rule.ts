@@ -37,13 +37,17 @@ export const rule: Rule.RuleModule = {
  * @param options The rule options.
  */
 function checkMirrors(context: Rule.RuleContext, options: Options): void {
+    const workDir = context.getCwd();
     const filename = context.getFilename();
-    const mirror = getMatchingMirror(filename, options.mirrors);
+    // When run using the rule tester "getFileName" returns the relative file path
+    // but when the rules is called by ESLint the path is absolute
+    const relativeFilePath = filename.startsWith(workDir) ? filename.substring(workDir.length + 1) : filename;
+    const mirror = getMatchingMirror(relativeFilePath, options.mirrors);
 
     if (mirror) {
-        const requiredFile = getRequiredFilePath(filename, mirror);
+        const requiredFile = getRequiredFilePath(relativeFilePath, mirror);
 
-        if (!fs.existsSync(context.getCwd() + path.sep + requiredFile)) {
+        if (!fs.existsSync(workDir + path.sep + requiredFile)) {
             context.report({
                 loc: { line: 1, column: 1 },
                 message: "required '" + requiredFile + "' mirrored file does not exists",
