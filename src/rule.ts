@@ -13,7 +13,7 @@ function getSchema(): object {
 }
 
 /**
- * The `"directory-mirror"` rule.
+ * The "directory-mirror" rule.
  */
 export const rule: Rule.RuleModule = {
     meta: {
@@ -33,7 +33,8 @@ export const rule: Rule.RuleModule = {
 function checkMirrors(context: Rule.RuleContext, program: Program, options: Options): void {
     const workDir = context.getCwd();
 
-    context.getFilename;
+    console.log(workDir);
+    console.log(context.getFilename());
 
     /**
    * const mirror = getMatchingMirror(program);
