@@ -26,8 +26,8 @@ Add `directory-mirror` to the `plugins` section of your `.eslintrc` file:
 
 There is only one rule within this plugin also named `directory-mirror`.
 
-This rule has one configuration option which you can use to specify that directories that should be mirrored.
-It's the easiest to explain the option by looking an example:
+This rule has one configuration option which you can use to specify the directories that should be mirrored.
+Let's use an example to understand the option:
 
 ```js
 {
@@ -47,9 +47,11 @@ It's the easiest to explain the option by looking an example:
 
 The option has a `mirrors` array with objects describing the mirrored directories.
 Read the object like this: `forEach` of these files require in the directory `dir` a file with the extension `ext`
-and the same name (including sub directory).
+and the same name (without extension and including sub directory).
 
 For the example above this means:
 
--   For every test file in the `test` folder there has to be a corresponding source file in the `src` folder.
--   And for every source file in the `src` folder there has to be a corresponding test file in the `test` folder.
+-   For every test file with the extension `.test.ts` in the `test` folder there has to be a corresponding
+    source file with the extension `.ts` in the `src` folder.
+-   And for every source file with the extension `.ts` in the `src` folder there has to be a corresponding
+    test file with the extension `.test.ts` in the `test` folder.
