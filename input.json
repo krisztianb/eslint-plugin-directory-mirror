@@ -64,7 +64,7 @@
         },
         "require": {
           "$ref": "#/definitions/DirectoryAndExtension",
-          "description": "Object describing there the required mirrored file should be located."
+          "description": "Object describing where the required mirrored file should be located."
         }
       },
       "required": [
