@@ -14,11 +14,11 @@ const testMirrorsSrc: InputOptions = {
     mirrors: [
         {
             forEach: { dir: "asdf", ext: ".txt", recursive: false },
-            require: { dir: "test" + path.sep + "src", ext: ".ts" },
+            require: { dir: path.join("test", "src"), ext: ".ts" },
         },
         {
-            forEach: { dir: "asdf" + path.sep + "sub", ext: ".txt", recursive: false },
-            require: { dir: "test" + path.sep + "src" + path.sep + "sub", ext: ".ts" },
+            forEach: { dir: path.join("asdf", "sub"), ext: ".txt", recursive: false },
+            require: { dir: path.join("test", "src", "sub"), ext: ".ts" },
         },
     ],
 };
@@ -28,13 +28,13 @@ tester.run("directory-mirror > multiple-mirrors", rule, {
         {
             name: "File in root folder has corresponding source file",
             options: [testMirrorsSrc],
-            filename: "asdf" + path.sep + "file.txt",
+            filename: path.join("asdf", "file.txt"),
             code: "",
         },
         {
             name: "File in sub folder has corresponding source file",
             options: [testMirrorsSrc],
-            filename: "asdf" + path.sep + "sub" + path.sep + "file_sub.txt",
+            filename: path.join("asdf", "sub", "file_sub.txt"),
             code: "",
         },
     ],
@@ -42,12 +42,11 @@ tester.run("directory-mirror > multiple-mirrors", rule, {
         {
             name: "File in root folder has no corresponding source file",
             options: [testMirrorsSrc],
-            filename: "asdf" + path.sep + "missing.txt",
+            filename: path.join("asdf", "missing.txt"),
             code: "",
             errors: [
                 {
-                    message:
-                        "required 'test" + path.sep + "src" + path.sep + "missing.ts' mirrored file does not exists",
+                    message: `required '${path.join("test", "src", "missing.ts")}' mirrored file does not exists`,
                 },
             ],
         },

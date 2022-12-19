@@ -7,7 +7,7 @@ import { DirectoryMirror, Options } from "./options";
  * Gets the schema defining the rule's input options.
  * @returns The schema defining the rule's input options.
  */
-function getSchema(): object {
+function getSchema(): Readonly<object> {
     const schema = require("../input.json");
     delete schema["$schema"];
     return schema;
@@ -22,7 +22,7 @@ export const rule: Rule.RuleModule = {
         schema: getSchema(),
     },
 
-    create(context) {
+    create(context: Rule.RuleContext) {
         const options = new Options(context.options[0] ?? {});
 
         return {
@@ -36,9 +36,10 @@ export const rule: Rule.RuleModule = {
  * @param context The context of the rule.
  * @param options The rule options.
  */
-function checkMirrors(context: Rule.RuleContext, options: Options): void {
+function checkMirrors(context: Rule.RuleContext, options: Readonly<Options>): void {
     const workDir = context.getCwd();
     const filename = context.getFilename();
+
     // When run using the rule tester "getFileName" returns the relative file path
     // but when the rules is called by ESLint the path is absolute
     const relativeFilePath = filename.startsWith(workDir) ? filename.substring(workDir.length + 1) : filename;
@@ -47,7 +48,7 @@ function checkMirrors(context: Rule.RuleContext, options: Options): void {
     if (mirror) {
         const requiredFile = getRequiredFilePath(relativeFilePath, mirror);
 
-        if (!fs.existsSync(workDir + path.sep + requiredFile)) {
+        if (!fs.existsSync(path.join(workDir, requiredFile))) {
             context.report({
                 loc: { line: 1, column: 1 },
                 message: "required '" + requiredFile + "' mirrored file does not exists",
@@ -62,12 +63,15 @@ function checkMirrors(context: Rule.RuleContext, options: Options): void {
  * @param mirrors All the mirrors passed to the rule.
  * @returns The mirror that the filename matches or undefined if no mirror matches the filename.
  */
-function getMatchingMirror(filename: string, mirrors: DirectoryMirror[]): DirectoryMirror | undefined {
+function getMatchingMirror(
+    filename: string,
+    mirrors: ReadonlyArray<DirectoryMirror>,
+): Readonly<DirectoryMirror> | undefined {
     return mirrors.filter(
         (m) =>
             filename.endsWith(m.forEach.ext) &&
             (m.forEach.recursive
-                ? path.dirname(filename).startsWith(m.forEach.dir)
+                ? (path.dirname(filename) + path.sep).startsWith(m.forEach.dir + path.sep)
                 : path.dirname(filename) === m.forEach.dir),
     )[0];
 }
@@ -78,11 +82,9 @@ function getMatchingMirror(filename: string, mirrors: DirectoryMirror[]): Direct
  * @param mirror The mirror that is used to compute the required file path.
  * @returns The file path for the given filename using the given mirror.
  */
-function getRequiredFilePath(filename: string, mirror: DirectoryMirror): string {
+function getRequiredFilePath(filename: string, mirror: Readonly<DirectoryMirror>): string {
     const subPath = path.dirname(filename).substring(mirror.forEach.dir.length);
     const filenameWithoutExt = path.basename(filename).slice(0, -mirror.forEach.ext.length);
 
-    return (
-        mirror.require.dir + path.sep + (subPath ? subPath + path.sep : "") + filenameWithoutExt + mirror.require.ext
-    );
+    return path.join(mirror.require.dir, subPath, filenameWithoutExt + mirror.require.ext);
 }

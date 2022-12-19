@@ -4,6 +4,12 @@
 
 An ESLint rule for mirroring directory structures.
 
+Use cases:
+
+-   Ensure that every unit test file has a corresponding source file
+-   Ensure that every source file has a corresponding unit test file
+-   etc.
+
 ## Installation
 
 Execute the following command within your project's root directory:
@@ -46,6 +52,7 @@ Let's use an example to understand the option:
 ```
 
 The option has a `mirrors` array with objects describing the mirrored directories.
+
 Read the object like this: `forEach` of these files require in the directory `dir` a file with the extension `ext`
 and the same name (without extension and including sub directory).
 

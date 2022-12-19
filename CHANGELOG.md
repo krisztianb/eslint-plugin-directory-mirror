@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2022-12-19
+### Fixed
+-   Bug when mixing OS specific path separators in plugin config
+
+
 ## [1.0.0] - 2022-12-18
 First release
 
-[unreleased]: https://github.com/krisztianb/eslint-plugin-directory-mirror/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/krisztianb/eslint-plugin-directory-mirror/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/krisztianb/eslint-plugin-directory-mirror/releases/tag/v1.0.1
 [1.0.0]: https://github.com/krisztianb/eslint-plugin-directory-mirror/releases/tag/v1.0.0
